@@ -1,0 +1,48 @@
+<templates>
+    <div t-name="stock_product_info.qtyStockAtDate">
+        <div t-att-class="!widget.data.display_qty_widget ? 'invisible' : ''">
+            <a tabindex="0" t-attf-class="fa fa-area-chart {{ widget.data.forecasted_issue ? 'text-danger' : 'text-primary' }}"/>
+        </div>
+    </div>
+
+    <div t-name="stock_product_info.QtyStockDetailPopOver">
+        <div style="max-height: 220px; overflow: auto;">
+            <table class="table table-borderless table-sm">
+                <tbody>
+                    <t t-if="qty_per_location">
+                        <tr>
+                            <td><strong>Location</strong></td>
+                            <td style="text-align: right;"><strong>Quantity</strong></td>
+                        </tr>
+                        <t t-foreach="qty_per_location" t-as="line">
+                            <tr>
+                                <td><span><t t-esc="line.name"/></span></td>
+                                <td style="text-align: right;">
+                                    <t t-if="line.visible and line.qty &gt; 0">
+                                        <t t-esc='line.qty'/> <t t-esc='uom'/>
+                                    </t>
+                                    <t t-elif="!line.visible and line.qty &gt; 0 ">
+                                        Disponible
+                                    </t>
+                                    <t t-else="">
+                                        NO DISPONIBLE
+                                    </t>
+                                </td>
+                            </tr>
+                        </t>
+                    </t>
+                </tbody>
+            </table>
+        </div>
+        <button t-if="!data.is_mto" class="text-left btn btn-link action_open_forecast"
+            type="button">
+            <i class="fa fa-fw o_button_icon fa-arrow-right"></i>
+            View Forecast
+        </button>
+    </div>
+
+    <div t-extend="stock.forecastWidget">
+        <t t-jquery=".o_forecast_report_button" t-operation="replace"/>
+    </div>
+
+</templates>

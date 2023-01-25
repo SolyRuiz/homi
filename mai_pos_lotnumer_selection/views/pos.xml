@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		
+		<record model="ir.ui.view" id="lot_view_pos_config_form">
+	        <field name="name">pos.config.form.view</field>
+	        <field name="model">pos.config</field>
+	        <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+	        <field name="arch" type="xml">
+				<xpath expr="//h2[@name='order']" position="before">
+					<h2 name="order">Lot/Serial Number Configuration</h2>
+					<div class="row mt16 o_settings_container" id="pos_login_screen">
+						<div id="category_reference" class="col-xs-12 col-md-6 o_setting_box">
+							<div class="o_setting_left_pane">
+								<field name="allow_pos_lot"/>
+							</div>
+							<div class="o_setting_right_pane">
+								<label for="allow_pos_lot" string="Lot/Serial Number Config"/>
+								<div class="text-muted">
+									Lot/Serial Number Configuration
+								</div>
+								<div class="content-group" attrs="{'invisible' : [('allow_pos_lot', '=', False)]}">
+									<div class="row mt16">
+										<!-- <label  for="lot_expire_days" class="col-md-3 o_light_label"/> -->
+										<field name="lot_expire_days" invisible="1"/>
+									</div>
+									<div class="row">
+										<label for="pos_lot_receipt" class="col-md-3 o_light_label"/>
+										<field name="pos_lot_receipt"/>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</xpath>
+
+				<xpath expr="//sheet" position="inside">
+	                <h2 name="order">Configuración Lote de producto en POS</h2>
+	                <div class="row mt16 o_settings_container">
+	                    <div class="col-12 col-lg-6 o_setting_box">
+	                        <div class="o_setting_left_pane">
+	                            <field name="allow_expiry_warning" />
+	                        </div>
+	                        <div class="o_setting_right_pane">
+	                            <label for="allow_expiry_warning" />
+	                            <div class="text-muted">
+	                                Mostrar aviso si el lote no existe.
+	                            </div>
+	                        </div>
+	                    </div>
+	                    <div class="col-12 col-lg-6 o_setting_box" groups="product.group_product_variant" >
+	                        <div class="o_setting_left_pane">
+	                            <field name="restrict_creating_lot" />
+	                        </div>
+	                        <div class="o_setting_right_pane">
+	                            <label for="restrict_creating_lot" />
+	                            <div class="text-muted">
+	                                Restringir al usuario crear nuevo lote.
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	            </xpath>
+
+			</field>
+		</record>
+
+		<record id="odoo_pos_config_view_form" model="ir.ui.view">
+			<field name="name">account.move.form.inherit.view</field>
+			<field name="model">account.move</field>
+			<field name="inherit_id" ref="account.view_move_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='name']" position="after">
+					<field name="pos_lot_ids" widget="many2many_tags" />
+				</xpath>
+			</field>
+		</record>
+
+		<record id="odoo_stock_lot_custom_view_form" model="ir.ui.view">
+			<field name="name">stock.production.lot.form.inherit.view</field>
+			<field name="model">stock.production.lot</field>
+			<field name="inherit_id" ref="stock.view_production_lot_form"/>
+			<field name="arch" type="xml">
+				<field name="company_id" position="after">
+					<field name="total_qty" invisible="1"/>
+					<field name="total_prd_qty"  invisible="1"/>
+				</field>
+			</field>
+		</record>
+
+		<record id="odoo_stock_lot_custom_view_tree" model="ir.ui.view">
+			<field name="name">stock.production.lot.tree.inherit.view</field>
+			<field name="model">stock.production.lot</field>
+			<field name="inherit_id" ref="stock.view_production_lot_tree"/>
+			<field name="arch" type="xml">
+				<field name="company_id" position="after">
+					<field name="total_qty" invisible="0"/>
+					<field name="total_prd_qty"  invisible="0"/>
+				</field>
+			</field>
+		</record>
+		
+
+		<template id="report_invoice_document_inherit_discount" inherit_id="account.report_invoice_document">
+			<xpath expr="//th[@name='th_price_unit']" position="before">
+				<th name="th_lot" class="text-left">
+					<span>POS Lot/Serial</span>
+				</th>
+			</xpath>
+			<xpath expr="//td[4]" position="after">
+				<td class="text-left">
+					<span t-esc="', '.join(map(lambda x: (x.lot_name), line.pos_lot_ids))" id="pos_lot_ids"/>
+				</td>
+			</xpath>
+		</template>
+
+	</data>
+</odoo>

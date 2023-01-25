@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="NoLotAvailable" owl="1">
+        <div role="dialog" class="modal-dialog">
+            <div class="popup popup-text">
+                <header class="title">
+                    <t t-esc="props.title" />
+                </header>
+                <main class="list-lines" style="font-size: 17px !important; font-weight: 500; !important">
+                    El número de lote/serie introducido no existe, por favor inténtelo con uno diferente/existente.
+                </main>
+                <footer class="footer">
+                    <div class="button cancel" t-on-click="cancel">
+                        Ok
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </t>
+
+</templates>

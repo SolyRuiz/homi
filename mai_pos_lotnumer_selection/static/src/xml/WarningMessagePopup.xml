@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="WarningMessagePopup" owl="1">
+        <div role="dialog" class="modal-dialog">
+            <div class="popup popup-text">
+                <header class="title">
+                    <t t-esc="props.title" />
+                </header>
+                <main class="list-lines" style="font-size: 17px !important; font-weight: 500 !important;">
+                    <t t-if="props.message.length != 0">
+                        El número de serie introducido
+                        <t t-set="count" t-value="0"/>
+                        <t t-foreach="props.message" t-as="invalid">
+                            <t t-if="count &gt; 0">
+                                <span>,</span>
+                            </t>
+                            <t t-esc="invalid.text"/>
+                            <t t-set="count" t-value="count+1"/>
+                        </t>
+                        no existe.
+                        <br/><br/>
+                    </t>
+                    <t t-if="props.expiry_lot.length != 0">
+                        <table style="width:100%">
+                            <tr>
+                                <th>Número de Serie</th>
+                                <th>Fecha de Vencimiento</th>
+                            </tr>
+                            <t t-foreach="props.expiry_lot" t-as="expiry">
+                                <tr>
+                                    <td><t t-esc="expiry.name"/></td>
+                                    <td><t t-esc="expiry.alert_date"/></td>
+                                </tr>
+                            </t>
+                        </table>
+                    </t>
+                </main>
+                <footer class="footer">
+                    <div class="button confirm" t-on-click="confirm">
+                        Ok
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </t>
+
+</templates>

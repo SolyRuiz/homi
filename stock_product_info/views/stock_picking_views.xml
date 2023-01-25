@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<record id="view_picking_form" model="ir.ui.view">
+            <field name="name">stock.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page/field[@name='move_ids_without_package']/form/group/field[@name='forecast_availability']" position="after">
+                    <field name="display_qty_widget" invisible="1"/>
+                    <widget name="qty_stock_at_date_widget" width="0.1" attrs="{'column_invisible': ['|', ('parent.picking_type_code', '=', 'incoming'), ('parent.state','=', 'done')]}"/>
+                </xpath>
+                <xpath expr="//page/field[@name='move_ids_without_package']/tree/field[@name='forecast_availability']" position="after">
+                    <field name="display_qty_widget" invisible="1"/>
+                    <widget name="qty_stock_at_date_widget" width="20px" attrs="{'column_invisible': ['|', ('parent.picking_type_code', '=', 'incoming'), ('parent.state','=', 'done')]}"/>
+                </xpath>
+            </field>
+        </record>
+</odoo>
